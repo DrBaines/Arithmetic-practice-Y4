@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Year 4 Maths Practice</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f1f5f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      width: 320px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    button {
+      padding: 10px;
+      margin: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    input {
+      font-size: 20px;
+      text-align: center;
+      width: 100%;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h2>Year 4 Maths Practice</h2>
+
+  <div>
+    <button onclick="setMode('add')">Addition</button>
+    <button onclick="setMode('sub')">Subtraction</button>
+    <button onclick="setMode('mult')">Times Tables</button>
+  </div>
+
+  <h3 id="question">Click “New Question”</h3>
+
+  <input id="answer" type="number"/>
+
+  <button onclick="checkAnswer()">Check Answer</button>
+  <button onclick="newQuestion()">New Question</button>
+
+  <p id="feedback"></p>
+</div>
+
+<script>
+  let mode = "add";
+  let correct = 0;
+
+  function setMode(m) {
+    mode = m;
+    newQuestion();
+  }
+
+  function newQuestion() {
+    let a, b;
+
+    if (mode === "add") {
+      a = Math.floor(Math.random() * 9000) + 100;
+      b = Math.floor(Math.random() * 9000) + 100;
+      correct = a + b;
+      document.getElementById("question").textContent = a + " + " + b;
+    }
+
+    if (mode === "sub") {
+      a = Math.floor(Math.random() * 9000) + 100;
+      b = Math.floor(Math.random() * a);
+      correct = a - b;
+      document.getElementById("question").textContent = a + " − " + b;
+    }
+
+    if (mode === "mult") {
+      a = Math.floor(Math.random() * 12) + 1;
+      b = Math.floor(Math.random() * 12) + 1;
+      correct = a * b;
+      document.getElementById("question").textContent = a + " × " + b;
+    }
+
+    document.getElementById("feedback").textContent = "";
+    document.getElementById("answer").value = "";
+  }
+
+  function checkAnswer() {
+    const user = Number(document.getElementById("answer").value);
+    if (user === correct) {
+      document.getElementById("feedback").textContent = "✅ Correct – great work!";
+    } else {
+      document.getElementById("feedback").textContent = "❌ Not quite. The answer was " + correct;
+    }
+  }
+</script>
+
+</body>
+</html>
+``
