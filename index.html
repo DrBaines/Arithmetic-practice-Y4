@@ -4,131 +4,135 @@
 <head>
   <meta charset="UTF-8">
   <title>Year 4 Maths Practice</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
     body {
+      margin: 0;
       font-family: Arial, sans-serif;
       background: #f1f5f9;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
     }
+
     .card {
       background: white;
-      padding: 20px;
-      border-radius: 12px;
-      width: 320px;
-      text-align: center;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      padding: 24px;
+      border-radius: 14px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.15);
     }
+
+    h1 {
+      text-align: center;
+      margin-top: 0;
+    }
+
+    .question {
+      margin-bottom: 16px;
+    }
+
+    .question label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 6px;
+      font-size: 18px;
+    }
+
+    .question input {
+      width: 100%;
+      padding: 8px;
+      font-size: 18px;
+      text-align: center;
+    }
+
     button {
+      width: 100%;
       padding: 10px;
-      margin: 5px;
-      font-size: 16px;
+      font-size: 18px;
+      margin-top: 10px;
       cursor: pointer;
     }
-    input {
-      font-size: 20px;
+
+    #feedback {
+      margin-top: 16px;
+      font-size: 18px;
+      font-weight: bold;
       text-align: center;
-      width: 100%;
-      margin: 10px 0;
     }
   </style>
 </head>
+
 <body>
 
 <div class="card">
-  <h2>Year 4 Maths Practice</h2>
+  <h1>Year 4 Maths Practice</h1>
 
-  <div>
-    <button onclick="setMode('add')">Addition</button>
-    <button onclick="setMode('sub')">Subtraction</button>
-    <button onclick="setMode('mult')">Times Tables</button>
+  <div class="question">
+    <label id="q1"></label>
+    <input type="number" id="a1">
   </div>
 
-  <h3 id="question">Click “New Question”</h3>
+  <div class="question">
+    <label id="q2"></label>
+    <input type="number" id="a2">
+  </div>
 
-  <input id="answer" type="number"/>
+  <div class="question">
+    <label id="q3"></label>
+    <input type="number" id="a3">
+  </div>
 
-  <button onclick="checkAnswer()">Check Answer</button>
-  <button onclick="newQuestion()">New Question</button>
+  <div class="question">
+    <label id="q4"></label>
+    <input type="number" id="a4">
+  </div>
 
-  <p id="feedback"></p>
+  <button onclick="checkAnswers()">Check Answers</button>
+  <button onclick="newQuestions()">New Questions</button>
+
+  <div id="feedback"></div>
 </div>
 
 <script>
-  
-    if (mode === "sub") {
-      a = Math.floor(Math.random() * 9000) + 100;
-      b = Math.floor(Math.random() * a); // ensures no negatives
-      correct = a - b;
-      text = `${a} − ${b}`;
+  let correctAnswers = [];
+
+  function newQuestions() {
+    correctAnswers = [];
+
+    // Addition (3-digit + 3-digit)
+    let addA = rand(100, 999);
+    let addB = rand(100, 999);
+    document.getElementById("q1").textContent = addA + " + " + addB;
+    correctAnswers[0] = addA + addB;
+
+    // Subtraction (no negatives)
+    let subA = rand(100, 999);
+    let subB = rand(0, subA);
+    document.getElementById("q2").textContent = subA + " − " + subB;
+    correctAnswers[1] = subA - subB;
+
+    // Multiplication (3-digit × 1-digit)
+    let multA = rand(100, 999);
+    let multB = rand(2, 9);
+    document.getElementById("q3").textContent = multA + " × " + multB;
+    correctAnswers[2] = multA * multB;
+
+    // Division (exact)
+    let divB = rand(2, 9);
+    let divAnswer = rand(10, 99);
+    let divA = divB * divAnswer;
+    document.getElementById("q4").textContent = divA + " ÷ " + divB;
+    correctAnswers[3] = divAnswer;
+
+    // Clear answers and feedback
+    for (let i = 1; i <= 4; i++) {
+      document.getElementById("a" + i).value = "";
     }
+    document.getElementById("feedback").textContent = "";
+  }
 
-
-    if (mode === "mult") {
-      a = Math.floor(Math.random() * 12) + 1;
-      b = Math.floor(Math.random() * 12) + 1;
-      correct = a * b;
-      text = `${a} × ${b}`;
-    }
-
-
-    setQuestion({ text, correct });
-    setAnswer("");
-    setFeedback("");
-  };
-
-  const checkAnswer = () => {
-    if (Number(answer) === question.correct) {
-      setFeedback("✅ Correct – great work!");
-    } else {
-      setFeedback(`❌ Not quite. The correct answer was ${question.correct}.`);
-    }
-  };
-
-  return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
-      <Card className="w-full max-w-md rounded-2xl shadow-lg">
-        <CardContent className="space-y-4 p-6">
-          <h1 className="text-2xl font-bold text-center">Year 4 Maths Practice</h1>
-
-
-          <div className="flex justify-center gap-2">
-            <Button variant={mode === "add" ? "default" : "outline"} onClick={() => setMode("add")}>
-              Addition
-            </Button>
-            <Button variant={mode === "sub" ? "default" : "outline"} onClick={() => setMode("sub")}>
-              Subtraction
-            </Button>
-            <Button variant={mode === "mult" ? "default" : "outline"} onClick={() => setMode("mult")}>
-              Times Tables
-            </Button>
-          </div>
-
-          <Button className="w-full" onClick={generateQuestion}>New Question</Button>
-
-          {question && (
-            <div className="text-center space-y-3">
-              <div className="text-3xl font-semibold">{question.text} = ?</div>
-              <input
-                type="number"
-                value={answer}
-                onChange={(e) => setAnswer(e.target.value)}
-                className="border rounded-xl p-2 w-full text-center text-xl"
-              />
-              <Button onClick={checkAnswer} className="w-full">Check Answer</Button>
-              {feedback && <div className="text-lg">{feedback}</div>}
-            </div>
-          )}
-        </CardContent>
-      </Card>
-    </div>
-  );
-}
-
-</script>
-
-</body>
-</html>
-``
+  function checkAnswers() {
